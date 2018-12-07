@@ -10,15 +10,7 @@ class MyApp extends StatelessWidget {
     // final wordPair = WordPair.random();
     return MaterialApp(
       title: 'Welcome to Flutter',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Welcome to Flutter'),
-        ),
-        body: Center(
-          child: RandomWords(),
-          //child: Text('Hello World'),
-        ),
-      ),
+      home: RandomWords(),
     );
   }
 }
@@ -111,11 +103,62 @@ class _MyHomePageState extends State<MyHomePage> {
 class RandomWordsState extends State<RandomWords> {
   /// # State class
   /// This class has state. [ref](https://flutter.io/docs/get-started/codelab)
-  ///
+  /// ...
+
+  final _suggestions = <WordPair>[];
+
+  final _biggerFont = const TextStyle(fontSize: 18.0);
+
   @override
   Widget build(BuildContext context) {
-    final wordPair = WordPair.random();
-    return Text(wordPair.asPascalCase);
+    // final wordPair = WordPair.random();
+    // return Text(wordPair.asPascalCase);
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Startup Name Generator'),
+      ),
+      body: _buildSuggestions(),
+    );
+  }
+
+  Widget _buildSuggestions() {
+    return ListView.builder(
+      padding: const EdgeInsets.all(16.0),
+      // The itemBuilder callbntaxack is called once per suggested word pairing,
+      // and places each suggestion into a ListTile row.
+      // For even rows, the function adds a ListTile row for the word pairing.
+      // For odd rows, the function adds a Divider widget to visually
+      // separate the entries. Note that the divider may be difficult
+      // to see on smaller devices.
+      itemBuilder: (content, i) {
+        if (i.isOdd) return Divider();
+
+        // The syntax "i ~ /2" divider i i by 2 and returns an integer result.
+        // For example : 1, 2, 3, 4, 5 becomes 0, 1, 1, 2, 2.
+        // This calulates the actual number or word pairings in the List View,
+        // minus the divider widgets.
+        final index = i ~/ 2;
+
+        /// If you've reached the end of the avaiable word pairings.
+        if (index >= _suggestions.length) {
+          // ... then generate 10 more and and tenm to the suggestions list.
+          _suggestions.addAll(generateWordPairs().take(10));
+        }
+        return _buildRow(_suggestions[index]);
+      },
+    );
+  }
+
+  /// The _buildSuggestions function calls _buildRow() once per word pair.
+  /// This displays each new pair in a **ListTitle**, which allows you to make
+  /// the rows more attractive in the next step.
+  ///
+  Widget _buildRow(WordPair pair) {
+    return ListTile(
+        title: Text(
+      pair.asPascalCase,
+      style: _biggerFont,
+    ));
   }
 }
 
