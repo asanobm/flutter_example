@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
 
@@ -6,6 +7,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // final wordPair = WordPair.random();
     return MaterialApp(
       title: 'Welcome to Flutter',
       home: Scaffold(
@@ -13,7 +15,8 @@ class MyApp extends StatelessWidget {
           title: Text('Welcome to Flutter'),
         ),
         body: Center(
-          child: Text('Hello World'),
+          child: RandomWords(),
+          //child: Text('Hello World'),
         ),
       ),
     );
@@ -103,4 +106,23 @@ class _MyHomePageState extends State<MyHomePage> {
       ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class RandomWordsState extends State<RandomWords> {
+  /// # State class
+  /// This class has state. [ref](https://flutter.io/docs/get-started/codelab)
+  ///
+  @override
+  Widget build(BuildContext context) {
+    final wordPair = WordPair.random();
+    return Text(wordPair.asPascalCase);
+  }
+}
+
+class RandomWords extends StatefulWidget {
+  /// # Stateful random ful widget class.
+  /// The RandomWords widget does little else beside creating its State class.
+  ///
+  @override
+  RandomWordsState createState() => RandomWordsState();
 }
