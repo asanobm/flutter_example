@@ -105,9 +105,13 @@ class RandomWordsState extends State<RandomWords> {
   /// This class has state. [ref](https://flutter.io/docs/get-started/codelab)
   /// ...
 
-  final _suggestions = <WordPair>[];
+  // final _suggestions = <WordPair>[];
+  final List<WordPair> _suggestions = <WordPair>[];
 
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+  final Set<WordPair> _saved = new Set<WordPair>();
+
+  // final _biggerFont = const TextStyle(fontSize: 18.0);
+  final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
 
   @override
   Widget build(BuildContext context) {
@@ -154,11 +158,29 @@ class RandomWordsState extends State<RandomWords> {
   /// the rows more attractive in the next step.
   ///
   Widget _buildRow(WordPair pair) {
+    ///
+    final bool alreadySaved = _saved.contains(pair);
+
+    ///
     return ListTile(
-        title: Text(
-      pair.asPascalCase,
-      style: _biggerFont,
-    ));
+      title: Text(
+        pair.asPascalCase,
+        style: _biggerFont,
+      ),
+      trailing: new Icon(
+        alreadySaved ? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved ? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) {
+            _saved.remove(pair);
+          } else {
+            _saved.add(pair);
+          }
+        });
+      },
+    );
   }
 }
 
